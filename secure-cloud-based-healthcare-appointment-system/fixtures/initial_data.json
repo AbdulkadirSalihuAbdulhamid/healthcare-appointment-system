@@ -1,0 +1,977 @@
+[
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor1",
+      "email": "bukola.adeyemi@example.com",
+      "first_name": "Bukola",
+      "last_name": "Adeyemi",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "avatar": "profiles/dr_bukola_obi.jpg.jpg",
+      "phone": "+2347616881284",
+      "dob": "1961-05-26",
+      "about": "MBBS from University of Lagos College of Medicine. 19 years of experience in Cardiologist.",
+      "specialization": "Neurologist",
+      "gender": "female",
+      "address": "27 Yaba Street",
+      "city": "Ilorin",
+      "state": "Kano",
+      "postal_code": "192148",
+      "country": "Nigeria",
+      "price_per_consultation": 11620,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor2",
+      "email": "blessing.okafor@example.com",
+      "first_name": "Blessing",
+      "last_name": "Okafor",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "avatar": "profiles/dr_femi.jpg",
+      "phone": "+2348276821174",
+      "dob": "1966-04-04",
+      "about": "MBBS from University of Lagos College of Medicine. 14 years of experience in Orthopedic Surgeon.",
+      "specialization": "Neurologist",
+      "gender": "female",
+      "address": "31 Lekki Street",
+      "city": "Onitsha",
+      "state": "Oyo",
+      "postal_code": "381065",
+      "country": "Nigeria",
+      "price_per_consultation": 5512,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor3",
+      "email": "emeka.adekunle@example.com",
+      "first_name": "Emeka",
+      "last_name": "Adekunle",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "avatar": "profiles/dr_aisha_adeleke.jpg.jpg",
+      "phone": "+2349541891635",
+      "dob": "1986-08-22",
+      "about": "MBBS from Ahmadu Bello University. 14 years of experience in Ophthalmologist.",
+      "specialization": "Dermatologist",
+      "gender": "male",
+      "address": "54 Surulere Street",
+      "city": "Benin City",
+      "state": "Lagos",
+      "postal_code": "312705",
+      "country": "Nigeria",
+      "price_per_consultation": 8216,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor4",
+      "email": "folake.adekunle@example.com",
+      "first_name": "Folake",
+      "last_name": "Adekunle",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "avatar": "profiles/dr_fatima_musa.jpg",
+      "phone": "+2349224801268",
+      "dob": "1990-12-05",
+      "about": "MBBS from University of Lagos College of Medicine. 16 years of experience in Gynecologist.",
+      "specialization": "Gynecologist",
+      "gender": "female",
+      "address": "93 Ikoyi Street",
+      "city": "Benin City",
+      "state": "Anambra",
+      "postal_code": "859450",
+      "country": "Nigeria",
+      "price_per_consultation": 6811,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor5",
+      "email": "halima.adebayo@example.com",
+      "first_name": "Halima",
+      "last_name": "Adebayo",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "avatar": "profiles/dr_babatunde_adeyemi.jpg.jpg",
+      "phone": "+2347166504838",
+      "dob": "1973-12-27",
+      "about": "MBBS from University of Nigeria Nsukka. 10 years of experience in Dermatologist.",
+      "specialization": "Orthopedic Surgeon",
+      "gender": "female",
+      "address": "4 Victoria Island Street",
+      "city": "Aba",
+      "state": "Kaduna",
+      "postal_code": "381472",
+      "country": "Nigeria",
+      "price_per_consultation": 14304,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor6",
+      "email": "musa.okafor@example.com",
+      "first_name": "Musa",
+      "last_name": "Okafor",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "avatar": "profiles/dr_amina_ademeyi.jpg.jpg",
+      "phone": "+2348613510894",
+      "dob": "1968-06-18",
+      "about": "MBBS from University of Nigeria Nsukka. 17 years of experience in Neurologist.",
+      "specialization": "Dermatologist",
+      "gender": "male",
+      "address": "46 Surulere Street",
+      "city": "Lagos",
+      "state": "Delta",
+      "postal_code": "101525",
+      "country": "Nigeria",
+      "price_per_consultation": 17873,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor7",
+      "email": "adunni.okafor@example.com",
+      "first_name": "Adunni",
+      "last_name": "Okafor",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "avatar": "profiles/dr_segun_ibrahim.jpg.jpg",
+      "phone": "+2348253760622",
+      "dob": "1969-09-07",
+      "about": "MBBS from University of Ibadan College of Medicine. 12 years of experience in Cardiologist.",
+      "specialization": "Dentist",
+      "gender": "female",
+      "address": "82 Victoria Island Street",
+      "city": "Lagos",
+      "state": "Kaduna",
+      "postal_code": "128942",
+      "country": "Nigeria",
+      "price_per_consultation": 7321,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor8",
+      "email": "tunde.adekunle@example.com",
+      "first_name": "Tunde",
+      "last_name": "Adekunle",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "avatar": "profiles/dr_ifeoma_adeyemi.jpg.jpg",
+      "phone": "+2348708374528",
+      "dob": "1963-01-15",
+      "about": "MBBS from Ahmadu Bello University. 17 years of experience in ENT Specialist.",
+      "specialization": "ENT Specialist",
+      "gender": "male",
+      "address": "34 Victoria Island Street",
+      "city": "Benin City",
+      "state": "Delta",
+      "postal_code": "518752",
+      "country": "Nigeria",
+      "price_per_consultation": 19344,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor9",
+      "email": "funke.adebayo@example.com",
+      "first_name": "Funke",
+      "last_name": "Adebayo",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "avatar": "profiles/dr_funke_okafor.jpg.png",
+      "phone": "+2347672473293",
+      "dob": "1966-08-23",
+      "about": "MBBS from University of Lagos College of Medicine. 17 years of experience in Gynecologist.",
+      "specialization": "Dentist",
+      "gender": "female",
+      "address": "59 Lekki Street",
+      "city": "Port Harcourt",
+      "state": "Edo",
+      "postal_code": "413303",
+      "country": "Nigeria",
+      "price_per_consultation": 9770,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor10",
+      "email": "temitope.ogunleye@example.com",
+      "first_name": "Temitope",
+      "last_name": "Ogunleye",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "avatar": "profiles/dr_halima_musa.jpg.jpg",
+      "phone": "+2349566986718",
+      "dob": "1972-03-26",
+      "about": "MBBS from University of Nigeria Nsukka. 7 years of experience in Cardiologist.",
+      "specialization": "Cardiologist",
+      "gender": "female",
+      "address": "56 Yaba Street",
+      "city": "Aba",
+      "state": "Edo",
+      "postal_code": "171994",
+      "country": "Nigeria",
+      "price_per_consultation": 5390,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor11",
+      "email": "adeolu.adekunle@example.com",
+      "first_name": "Adeolu",
+      "last_name": "Adekunle",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 11,
+    "fields": {
+      "user": 11,
+      "avatar": "profiles/dr_ibrahim_nwankwo.jpg.jpg",
+      "phone": "+2348371624290",
+      "dob": "1982-11-09",
+      "about": "MBBS from University of Lagos College of Medicine. 6 years of experience in Cardiologist.",
+      "specialization": "Pediatrician",
+      "gender": "male",
+      "address": "78 Surulere Street",
+      "city": "Warri",
+      "state": "Kaduna",
+      "postal_code": "446039",
+      "country": "Nigeria",
+      "price_per_consultation": 13162,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor12",
+      "email": "segun.oluwaseun@example.com",
+      "first_name": "Segun",
+      "last_name": "Oluwaseun",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 12,
+    "fields": {
+      "user": 12,
+      "avatar": "defaults/user.png",
+      "phone": "+2349584962232",
+      "dob": "1986-12-19",
+      "about": "MBBS from University of Ibadan College of Medicine. 7 years of experience in Pediatrician.",
+      "specialization": "Dentist",
+      "gender": "male",
+      "address": "76 Surulere Street",
+      "city": "Warri",
+      "state": "Kaduna",
+      "postal_code": "499009",
+      "country": "Nigeria",
+      "price_per_consultation": 7022,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor13",
+      "email": "ngozi.ogunleye@example.com",
+      "first_name": "Ngozi",
+      "last_name": "Ogunleye",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 13,
+    "fields": {
+      "user": 13,
+      "avatar": "defaults/user.png",
+      "phone": "+2349308873111",
+      "dob": "1981-04-23",
+      "about": "MBBS from University of Ibadan College of Medicine. 18 years of experience in Ophthalmologist.",
+      "specialization": "Dermatologist",
+      "gender": "female",
+      "address": "5 Yaba Street",
+      "city": "Kaduna",
+      "state": "Abuja",
+      "postal_code": "463647",
+      "country": "Nigeria",
+      "price_per_consultation": 11494,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor14",
+      "email": "halima.okafor@example.com",
+      "first_name": "Halima",
+      "last_name": "Okafor",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 14,
+    "fields": {
+      "user": 14,
+      "avatar": "defaults/user.png",
+      "phone": "+2349781550674",
+      "dob": "1985-02-12",
+      "about": "MBBS from University of Ibadan College of Medicine. 20 years of experience in Ophthalmologist.",
+      "specialization": "Gynecologist",
+      "gender": "female",
+      "address": "79 Yaba Street",
+      "city": "Kaduna",
+      "state": "Abia",
+      "postal_code": "716009",
+      "country": "Nigeria",
+      "price_per_consultation": 11614,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "doctor15",
+      "email": "zainab.musa@example.com",
+      "first_name": "Zainab",
+      "last_name": "Musa",
+      "role": "doctor",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 15,
+    "fields": {
+      "user": 15,
+      "avatar": "defaults/user.png",
+      "phone": "+2348857627985",
+      "dob": "1976-11-16",
+      "about": "MBBS from University of Ibadan College of Medicine. 13 years of experience in Neurologist.",
+      "specialization": "Pediatrician",
+      "gender": "female",
+      "address": "34 Victoria Island Street",
+      "city": "Warri",
+      "state": "Abuja",
+      "postal_code": "897550",
+      "country": "Nigeria",
+      "price_per_consultation": 8393,
+      "is_available": true
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 16,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient1",
+      "email": "oluwaseun.okafor@example.com",
+      "first_name": "Oluwaseun",
+      "last_name": "Okafor",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 16,
+    "fields": {
+      "user": 16,
+      "phone": "+2348345591720",
+      "dob": "1995-01-07",
+      "gender": "male",
+      "address": "Flat 12A, 35 Ikeja Street",
+      "city": "Onitsha",
+      "state": "Abuja",
+      "postal_code": "168876",
+      "country": "Nigeria",
+      "blood_group": "A-",
+      "allergies": "Food Allergy",
+      "medical_conditions": "Asthma"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 17,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient2",
+      "email": "amina.ibrahim@example.com",
+      "first_name": "Amina",
+      "last_name": "Ibrahim",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 17,
+    "fields": {
+      "user": 17,
+      "phone": "+2347184990200",
+      "dob": "1999-02-18",
+      "gender": "female",
+      "address": "Flat 15A, 19 Gbagada Street",
+      "city": "Onitsha",
+      "state": "Anambra",
+      "postal_code": "324833",
+      "country": "Nigeria",
+      "blood_group": "B+",
+      "allergies": "Drug Allergy",
+      "medical_conditions": "Diabetes"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 18,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient3",
+      "email": "adunni.nwankwo@example.com",
+      "first_name": "Adunni",
+      "last_name": "Nwankwo",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 18,
+    "fields": {
+      "user": 18,
+      "phone": "+2349443975004",
+      "dob": "1992-05-06",
+      "gender": "female",
+      "address": "Flat 3A, 90 Ikoyi Street",
+      "city": "Ibadan",
+      "state": "Kaduna",
+      "postal_code": "380454",
+      "country": "Nigeria",
+      "blood_group": "AB+",
+      "allergies": "Drug Allergy",
+      "medical_conditions": "None"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 19,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient4",
+      "email": "ifeoma.adebayo@example.com",
+      "first_name": "Ifeoma",
+      "last_name": "Adebayo",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 19,
+    "fields": {
+      "user": 19,
+      "phone": "+2348752824489",
+      "dob": "1980-06-24",
+      "gender": "female",
+      "address": "Flat 4A, 11 Maryland Street",
+      "city": "Kaduna",
+      "state": "Borno",
+      "postal_code": "856719",
+      "country": "Nigeria",
+      "blood_group": "A-",
+      "allergies": "Food Allergy",
+      "medical_conditions": "None"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 20,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient5",
+      "email": "halima.adeleke@example.com",
+      "first_name": "Halima",
+      "last_name": "Adeleke",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 20,
+    "fields": {
+      "user": 20,
+      "phone": "+2349184289186",
+      "dob": "1984-02-04",
+      "gender": "female",
+      "address": "Flat 17A, 9 Lekki Street",
+      "city": "Onitsha",
+      "state": "Kwara",
+      "postal_code": "967881",
+      "country": "Nigeria",
+      "blood_group": "O-",
+      "allergies": "None",
+      "medical_conditions": "Asthma"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 21,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient6",
+      "email": "blessing.oluwaseun@example.com",
+      "first_name": "Blessing",
+      "last_name": "Oluwaseun",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 21,
+    "fields": {
+      "user": 21,
+      "phone": "+2349693042796",
+      "dob": "1993-05-09",
+      "gender": "female",
+      "address": "Flat 16A, 63 Maryland Street",
+      "city": "Port Harcourt",
+      "state": "Abia",
+      "postal_code": "938121",
+      "country": "Nigeria",
+      "blood_group": "O-",
+      "allergies": "Dust Allergy",
+      "medical_conditions": "Diabetes"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 22,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient7",
+      "email": "bukola.adeleke@example.com",
+      "first_name": "Bukola",
+      "last_name": "Adeleke",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 22,
+    "fields": {
+      "user": 22,
+      "phone": "+2349422474029",
+      "dob": "1980-01-04",
+      "gender": "female",
+      "address": "Flat 18A, 83 Lekki Street",
+      "city": "Port Harcourt",
+      "state": "Abuja",
+      "postal_code": "986246",
+      "country": "Nigeria",
+      "blood_group": "A-",
+      "allergies": "Drug Allergy",
+      "medical_conditions": "Diabetes"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 23,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient8",
+      "email": "aisha.oluwaseun@example.com",
+      "first_name": "Aisha",
+      "last_name": "Oluwaseun",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 23,
+    "fields": {
+      "user": 23,
+      "phone": "+2348328618375",
+      "dob": "1977-08-26",
+      "gender": "female",
+      "address": "Flat 6A, 26 Gbagada Street",
+      "city": "Benin City",
+      "state": "Kaduna",
+      "postal_code": "583310",
+      "country": "Nigeria",
+      "blood_group": "AB-",
+      "allergies": "Food Allergy",
+      "medical_conditions": "High Blood Pressure"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 24,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient9",
+      "email": "chioma.babatunde@example.com",
+      "first_name": "Chioma",
+      "last_name": "Babatunde",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 24,
+    "fields": {
+      "user": 24,
+      "phone": "+2349267788630",
+      "dob": "1986-07-10",
+      "gender": "female",
+      "address": "Flat 2A, 9 Maryland Street",
+      "city": "Kaduna",
+      "state": "Oyo",
+      "postal_code": "190194",
+      "country": "Nigeria",
+      "blood_group": "B-",
+      "allergies": "Dust Allergy",
+      "medical_conditions": "High Blood Pressure"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 25,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient10",
+      "email": "segun.babatunde@example.com",
+      "first_name": "Segun",
+      "last_name": "Babatunde",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 25,
+    "fields": {
+      "user": 25,
+      "phone": "+2348504241935",
+      "dob": "2000-03-21",
+      "gender": "male",
+      "address": "Flat 8A, 96 Maryland Street",
+      "city": "Warri",
+      "state": "Lagos",
+      "postal_code": "333660",
+      "country": "Nigeria",
+      "blood_group": "O-",
+      "allergies": "Drug Allergy",
+      "medical_conditions": "Diabetes"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 26,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient11",
+      "email": "adunni.oluwaseun@example.com",
+      "first_name": "Adunni",
+      "last_name": "Oluwaseun",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 26,
+    "fields": {
+      "user": 26,
+      "phone": "+2349899905861",
+      "dob": "1976-11-06",
+      "gender": "female",
+      "address": "Flat 8A, 25 Yaba Street",
+      "city": "Port Harcourt",
+      "state": "Edo",
+      "postal_code": "797175",
+      "country": "Nigeria",
+      "blood_group": "B-",
+      "allergies": "None",
+      "medical_conditions": "Asthma"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 27,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient12",
+      "email": "femi.adeleke@example.com",
+      "first_name": "Femi",
+      "last_name": "Adeleke",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 27,
+    "fields": {
+      "user": 27,
+      "phone": "+2347589624316",
+      "dob": "1975-02-13",
+      "gender": "male",
+      "address": "Flat 8A, 57 Gbagada Street",
+      "city": "Kaduna",
+      "state": "Rivers",
+      "postal_code": "906588",
+      "country": "Nigeria",
+      "blood_group": "AB+",
+      "allergies": "None",
+      "medical_conditions": "Diabetes"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 28,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient13",
+      "email": "tunde.okoro@example.com",
+      "first_name": "Tunde",
+      "last_name": "Okoro",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 28,
+    "fields": {
+      "user": 28,
+      "phone": "+2348046435661",
+      "dob": "1995-05-23",
+      "gender": "male",
+      "address": "Flat 20A, 59 Surulere Street",
+      "city": "Kaduna",
+      "state": "Rivers",
+      "postal_code": "832455",
+      "country": "Nigeria",
+      "blood_group": "AB-",
+      "allergies": "Drug Allergy",
+      "medical_conditions": "Asthma"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 29,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient14",
+      "email": "aisha.adebayo@example.com",
+      "first_name": "Aisha",
+      "last_name": "Adebayo",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 29,
+    "fields": {
+      "user": 29,
+      "phone": "+2349288260263",
+      "dob": "1999-11-22",
+      "gender": "female",
+      "address": "Flat 12A, 75 Maryland Street",
+      "city": "Kaduna",
+      "state": "Abia",
+      "postal_code": "239650",
+      "country": "Nigeria",
+      "blood_group": "B-",
+      "allergies": "Drug Allergy",
+      "medical_conditions": "None"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 30,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$OcHcETvxtfm6vrCHNV3C26$XuDrKX1V0pYUyxhCFekQ4QZtJ+17u7B/sjd/y7zuGC8=",
+      "username": "patient15",
+      "email": "tunde.adebayo@example.com",
+      "first_name": "Tunde",
+      "last_name": "Adebayo",
+      "role": "patient",
+      "is_active": true,
+      "date_joined": "2023-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.profile",
+    "pk": 30,
+    "fields": {
+      "user": 30,
+      "phone": "+2347051874936",
+      "dob": "1994-02-10",
+      "gender": "male",
+      "address": "Flat 3A, 47 Yaba Street",
+      "city": "Ilorin",
+      "state": "Oyo",
+      "postal_code": "560837",
+      "country": "Nigeria",
+      "blood_group": "A+",
+      "allergies": "Drug Allergy",
+      "medical_conditions": "Asthma"
+    }
+  }
+]

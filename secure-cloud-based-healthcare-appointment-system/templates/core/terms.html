@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms and Conditions{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="terms-content">
+                    <div class="terms-text">
+                        <h3>Terms and Conditions</h3>
+                        <h4>1. Overview</h4>
+                        <p>These Terms govern your use of the DocBook platform. By creating an account or booking an appointment, you confirm that you have read, understood, and agree to be bound by these Terms.</p>
+
+                        <h4>2. Acceptable Use</h4>
+                        <p>You agree to use DocBook only for lawful purposes and in a manner that does not infringe upon the rights of others or restrict their use of the service. Automated data scraping, impersonation, and misrepresentation of medical credentials are strictly prohibited.</p>
+
+                        <h4>3. Appointment Booking & Cancellations</h4>
+                        <ul>
+                            <li>Provide accurate personal and medical information when scheduling an appointment.</li>
+                            <li>Cancel at least 24 hours before the scheduled time to avoid being marked as a no-show.</li>
+                            <li>Repeated no-shows may result in temporary suspension of booking privileges.</li>
+                        </ul>
+
+                        <h4>4. Medical Content</h4>
+                        <p>DocBook does not provide medical diagnoses or treatment. All clinical decisions are made exclusively by licensed healthcare professionals. Online content is for informational purposes and is not a substitute for in-person medical advice.</p>
+
+                        <h4>5. User Accounts & Security</h4>
+                        <p>You are responsible for safeguarding your login credentials. Notify us immediately if you suspect unauthorized access to your account. DocBook reserves the right to disable any account that violates these Terms.</p>
+
+                        <h4>6. Fees & Payments</h4>
+                        <p>Consultation fees are set by each doctor and displayed before you confirm a booking. Payment instructions are provided within the booking workflow. You are responsible for any additional charges imposed by your payment provider.</p>
+
+                        <h4>7. Data Privacy & Security</h4>
+                        <p>DocBook processes personal data in accordance with our Privacy Policy and applicable Nigerian data-protection regulations. We use secure login, encrypted communication, and role-based access to protect sensitive health information.</p>
+
+                        <h4>8. Limitation of Liability</h4>
+                        <p>DocBook provides the platform “as is”. We do not guarantee uninterrupted availability. To the fullest extent permitted by law, DocBook is not liable for indirect, incidental, or consequential damages arising from your use of the platform or interactions with healthcare providers.</p>
+
+                        <h4>9. Service Changes</h4>
+                        <p>We may update these Terms or modify platform features at any time to improve security, comply with regulation, or enhance user experience. Material changes will be communicated through the website or via email.</p>
+
+                        <h4>10. Contact</h4>
+                        <p>Questions about these Terms? Reach us at <a href="mailto:abdulkadirsalihuak@gmail.com">abdulkadirsalihuak@gmail.com</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .terms-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        margin: 40px 0;
+    }
+    .terms-text h3 {
+        color: #272b41;
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+    .terms-text h4 {
+        color: #272b41;
+        font-size: 18px;
+        margin: 25px 0 10px;
+    }
+    .terms-text p, .terms-text ul {
+        color: #757575;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+{% endblock %} 

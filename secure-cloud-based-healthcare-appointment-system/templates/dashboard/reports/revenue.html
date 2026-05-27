@@ -1,0 +1,224 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% load money %}
+
+{% block title %}Revenue Reports{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="page-title">Revenue Reports</h3>
+    </div>
+  </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row">
+  <div class="col-xl-3 col-sm-6 col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="dash-widget-header d-flex flex-column align-items-center">
+          <div class="text-center">
+            <h3>{% money total_revenue %}</h3>
+            <h6>Total Revenue</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="dash-widget-header d-flex flex-column align-items-center">
+          <div class="text-center">
+            <h3>{{ total_appointments }}</h3>
+            <h6>Total Appointments</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="dash-widget-header d-flex flex-column align-items-center">
+          <div class="text-center">
+            <h3>{% money average_revenue_per_appointment|floatformat:2 %}</h3>
+            <h6>Avg. Revenue/Appointment</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-sm-6 col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="dash-widget-header d-flex flex-column align-items-center">
+          <div class="text-center">
+            <h3>{% money highest_revenue_day.total|default:0 %}</h3>
+            <h6>Highest Daily Revenue</h6>
+            <small>{{ highest_revenue_day.day|date:"d M Y"|default:"N/A" }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row">
+  <!-- Monthly Revenue Chart -->
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Monthly Revenue</h4>
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue by Specialization -->
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Revenue by Specialization</h4>
+        <canvas id="specializationChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Doctor Revenue Table -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Revenue by Doctor</h4>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Doctor</th>
+                <th>Appointments</th>
+                <th>Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for stat in doctor_revenue %}
+              <tr>
+                <td>Dr. {{ stat.doctor__first_name }} {{ stat.doctor__last_name }}</td>
+                <td>{{ stat.appointments }}</td>
+                <td>{% money stat.revenue %}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted">No revenue data yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {# Safe JSON for charts #}
+  {{ specialization_revenue|json_script:"specialization-data" }}
+  {{ monthly_revenue_stats|json_script:"monthly-revenue-data" }}
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Read JSON safely (falls back to [] if missing)
+    const specializationData = JSON.parse(
+      (document.getElementById('specialization-data')?.textContent || '[]')
+    );
+    const revenueData = JSON.parse(
+      (document.getElementById('monthly-revenue-data')?.textContent || '[]')
+    );
+
+    // Specialization Revenue Chart (pie)
+    (function () {
+      const canvas = document.getElementById('specializationChart');
+      if (!canvas || !Array.isArray(specializationData)) return;
+
+      new Chart(canvas, {
+        type: 'pie',
+        data: {
+          labels: specializationData.map(d => d.doctor__profile__specialization__name),
+          datasets: [{
+            data: specializationData.map(d => d.revenue),
+            backgroundColor: [
+              '#20c0f3', '#28a745', '#dc3545', '#ffc107',
+              '#17a2b8', '#6610f2', '#e83e8c', '#fd7e14'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'right' },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const value = context.parsed ?? 0;
+                  const total = (context.dataset.data || []).reduce((a, b) => a + (b || 0), 0);
+                  const percentage = total ? ((value * 100) / total).toFixed(1) : '0.0';
+                  return `₦${value} (${percentage}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+    })();
+
+    // Monthly Revenue Chart (bar)
+    (function () {
+      const canvas = document.getElementById('revenueChart');
+      if (!canvas || !Array.isArray(revenueData)) return;
+
+      new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: revenueData.map(d => {
+            // Try to format "month" as date; if not a valid date, show as-is
+            const date = new Date(d.month);
+            return isNaN(date) ? (d.month || '') :
+              date.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+          }),
+          datasets: [{
+            label: 'Revenue',
+            data: revenueData.map(d => d.revenue),
+            backgroundColor: '#20c0f3'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) { return '₦' + value; }
+              }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(context) { return '₦' + (context.parsed?.y ?? 0); }
+              }
+            }
+          }
+        }
+      });
+    })();
+  </script>
+{% endblock %}

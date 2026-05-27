@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load money %}
+
+{% block title %}Doctors{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <style>
+        .doctor-img img,
+        .doctor-img .doctor-photo {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            object-position: center top;
+            border-radius: 5px;
+            display: block;
+        }
+        
+        .doctor-img {
+            width: 150px;
+            min-width: 150px;
+            max-width: 150px;
+            height: 150px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="breadcrumb-bar">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-8 col-12">
+                    <nav aria-label="breadcrumb" class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Doctors</li>
+                        </ol>
+                    </nav>
+                    {% if search_query %}
+                        <h2 class="breadcrumb-title">{{ doctors.count }} matches found for: {{ search_query }}</h2>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 col-12 d-md-block d-none">
+                    <div class="sort-by mr-5">
+                        <span class="sort-title">Sort by</span>
+                        <span class="sortby-fliter">
+                            <select class="select" name="sort" onchange="updateSort(this.value)">
+                                <option value="">Select</option>
+                                <option value="price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                <option value="price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Rating</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
+                    <div class="card filter-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3">Search Filter</h4>
+                            <form method="get" action="{% url 'doctors:list' %}">
+                                {% if request.GET.q %}
+                                    <input type="hidden" name="q" value="{{ request.GET.q }}">
+                                {% endif %}
+                                {% if request.GET.location %}
+                                    <input type="hidden" name="location" value="{{ request.GET.location }}">
+                                {% endif %}
+                                <div class="filter-widget">
+                                    <h4>Gender</h4>
+                                    <div>
+                                        <label class="custom_check">
+                                            <input type="checkbox" name="gender" value="male" 
+                                                {% if 'male' in request.GET.getlist|default:'' %}checked{% endif %}>
+                                            <span class="checkmark"></span> Male Doctor
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="custom_check">
+                                            <input type="checkbox" name="gender" value="female"
+                                                {% if 'female' in request.GET.getlist|default:'' %}checked{% endif %}>
+                                            <span class="checkmark"></span> Female Doctor
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="filter-widget">
+                                    <h4>Select Specialist</h4>
+                                    {% for specialization in specializations %}
+                                        <div>
+                                            <label class="custom_check">
+                                                <input type="checkbox" name="specialization" value="{{ specialization }}" 
+                                                    {% if specialization in request.GET.getlist.specialization %}checked{% endif %}>
+                                                <span class="checkmark"></span> {{ specialization }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="btn-search">
+                                    <button type="submit" class="btn btn-block">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-8 col-xl-9">
+                    {% if doctors %}
+                        {% for doctor in doctors %}
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="doctor-widget">
+                                        <div class="doc-info-left">
+                                            <div class="doctor-img">
+                                                <a href="{% url 'doctors:doctor-profile' doctor.username %}">
+                                                    {% if doctor.profile.avatar and doctor.profile.avatar.name != 'defaults/user.png' and 'profiles/' in doctor.profile.avatar.name %}
+                                                        <img src="/media/{{ doctor.profile.avatar.name }}"
+                                                             class="img-fluid doctor-photo"
+                                                             alt="{{ doctor.get_full_name }}">
+                                                    {% elif doctor.profile.gender == "female" %}
+                                                        <img src="{% static 'assets/img/dr_ifeoma_adeyemi.jpg' %}"
+                                                             class="img-fluid doctor-photo"
+                                                             alt="Doctor portrait">
+                                                    {% else %}
+                                                        <img src="{% static 'assets/img/dr_ibrahim_obi.jpg' %}"
+                                                             class="img-fluid doctor-photo"
+                                                             alt="Doctor portrait">
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                            <div class="doc-info-cont">
+                                                <h4 class="doc-name">
+                                                    <a href="{% url 'doctors:doctor-profile' doctor.username %}">Dr. {{ doctor.get_full_name }}</a>
+                                                </h4>
+                                                <p class="doc-speciality">{{ doctor.profile.specialization|default:"General Practitioner" }}</p>
+                                                <div class="rating">
+                                                    <i class="fas fa-star {% if doctor.average_rating >= 1 %}filled{% endif %}"></i>
+                                                    <i class="fas fa-star {% if doctor.average_rating >= 2 %}filled{% endif %}"></i>
+                                                    <i class="fas fa-star {% if doctor.average_rating >= 3 %}filled{% endif %}"></i>
+                                                    <i class="fas fa-star {% if doctor.average_rating >= 4 %}filled{% endif %}"></i>
+                                                    <i class="fas fa-star {% if doctor.average_rating >= 5 %}filled{% endif %}"></i>
+                                                    <span class="d-inline-block average-rating">({{ doctor.reviews_received.count|default:0 }})</span>
+                                                </div>
+                                                <div class="clinic-details">
+                                                    <p class="doc-location">
+                                                        <i class="fas fa-map-marker-alt"></i> {{ doctor.profile.city|default:"N/A" }}{% if doctor.profile.state %}, {{ doctor.profile.state }}{% endif %}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="doc-info-right">
+                                            <div class="clini-infos">
+                                                <ul>
+                                                    {% if doctor.profile.city or doctor.profile.state %}
+                                                        <li>
+                                                            <i class="fas fa-map-marker-alt"></i> 
+                                                            {% if doctor.profile.address %}
+                                                                <a href="https://maps.google.com/?q={{ doctor.profile.address|urlencode }}{% if doctor.profile.city %},+{{ doctor.profile.city|urlencode }}{% endif %}{% if doctor.profile.state %},+{{ doctor.profile.state|urlencode }}{% endif %}" target="_blank" rel="noopener noreferrer">
+                                                                    {{ doctor.profile.address }}{% if doctor.profile.city %}, {{ doctor.profile.city }}{% endif %}{% if doctor.profile.state %}, {{ doctor.profile.state }}{% endif %}
+                                                                </a>
+                                                            {% else %}
+                                                                {% if doctor.profile.city or doctor.profile.state %}
+                                                                    <a href="https://maps.google.com/?q={% if doctor.profile.city %}{{ doctor.profile.city|urlencode }}{% endif %}{% if doctor.profile.state %},+{{ doctor.profile.state|urlencode }}{% endif %}" target="_blank" rel="noopener noreferrer">
+                                                                        {{ doctor.profile.city }}{% if doctor.profile.state %}, {{ doctor.profile.state }}{% endif %}
+                                                                    </a>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if doctor.profile.price_per_consultation %}
+                                                        <li>
+                                                            <i class="far fa-money-bill-alt"></i> {% money doctor.profile.price_per_consultation %}
+                                                            <i class="fas fa-info-circle" data-toggle="tooltip" title="Consultation Fee"></i>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if doctor.profile.phone %}
+                                                        <li>
+                                                            <i class="fas fa-phone"></i> 
+                                                            <a href="tel:{{ doctor.profile.phone }}">{{ doctor.profile.phone }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                    {% if doctor.email %}
+                                                        <li>
+                                                            <i class="fas fa-envelope"></i> 
+                                                            <a href="mailto:{{ doctor.email }}">{{ doctor.email }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                            <div class="clinic-booking">
+                                                <a class="apt-btn" href="{% url 'bookings:doctor-booking-view' doctor.username %}">Book Appointment</a>
+                                                <a class="btn btn-outline-primary" href="{% url 'doctors:doctor-profile' doctor.username %}">View Profile</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% if is_paginated %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pagination-wrapper">
+                                        <ul class="pagination">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Previous</a>
+                                                </li>
+                                            {% endif %}
+                                            {% for num in page_obj.paginator.page_range %}
+                                                {% if page_obj.number == num %}
+                                                    <li class="page-item active">
+                                                        <span class="page-link">{{ num }}</span>
+                                                    </li>
+                                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if page_obj.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Next</a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4>No doctors found</h4>
+                                <p>Try adjusting your search criteria.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+function updateSort(value) {
+    const url = new URL(window.location.href);
+    if (value) {
+        url.searchParams.set('sort', value);
+    } else {
+        url.searchParams.delete('sort');
+    }
+    window.location.href = url.toString();
+}
+</script>
+
+{% endblock %}

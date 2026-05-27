@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load money %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <style>
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(0, 82, 155, 0.45) 0%, rgba(0, 123, 255, 0.45) 100%),
+                        url('{% static "assets/img/medic.jpg" %}') center/cover no-repeat;
+            background-blend-mode: overlay;
+            padding: 60px 0;
+            position: relative;
+            min-height: 210px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.75) 0%, rgba(0, 86, 179, 0.75) 100%);
+            z-index: 0;
+        }
+        
+        .hero-banner .banner-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-banner .banner-header h1 {
+            color: #ffffff;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-banner .banner-header p {
+            color: #ffffff;
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-banner .search-box {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+
+        /* Put location, doctor search, and button on one line */
+        .hero-banner .search-box form {
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+            flex-wrap: nowrap;
+        }
+
+        .hero-banner .search-box .form-group {
+            flex: 1 1 0;
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Ensure all form controls (inputs) align at the same baseline */
+        .hero-banner .search-box .form-group .form-control {
+            margin-bottom: 0;
+        }
+        
+        .hero-banner .search-box .form-group .form-text {
+            margin-top: 8px;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+        
+        /* Align search button with inputs */
+        .hero-banner .search-box .search-btn {
+            align-self: flex-end;
+            margin-bottom: 0;
+        }
+
+        /* Both inputs - white background, black text */
+        .hero-banner .search-box .form-control {
+            height: 58px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2a37;
+            background-color: #ffffff !important;
+            border: 1px solid #e5e7eb;
+            box-shadow: none;
+            padding: 12px 16px;
+        }
+
+        .hero-banner .search-box .form-control:focus {
+            background-color: #ffffff !important;
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .hero-banner .search-box .form-control::placeholder {
+            color: #1f2a37;
+            opacity: 0.6;
+            font-weight: 500;
+        }
+
+        .hero-banner .search-box .form-text {
+            color: #5f6b7d;
+            margin-top: 8px;
+            font-size: 0.875rem;
+        }
+
+        /* Search button aligned on same row */
+        .hero-banner .search-box .search-btn {
+            flex: 0 0 auto;
+            height: 58px;
+            padding: 0 32px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            white-space: nowrap;
+            font-weight: 600;
+            background: #00c6b7;
+            border: 0;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 198, 183, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .hero-banner .search-box .search-btn:hover {
+            background: #00b3a6;
+            box-shadow: 0 6px 16px rgba(0, 198, 183, 0.45);
+            transform: translateY(-1px);
+        }
+        
+            /* On small screens, stack them vertically */
+        @media (max-width: 991.98px) {
+            .hero-banner .search-box form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hero-banner .search-box .form-group {
+                width: 100%;
+            }
+
+            .hero-banner .search-box .search-btn {
+                width: 100%;
+                flex: 1 1 auto;
+            }
+        }
+        
+        /* Fix doctor image sizing in popular doctors section */
+        .section-doctors .doc-img {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+        }
+        
+        .section-doctors .doc-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+        
+        /* Fix location input padding to separate icon from text */
+        .hero-banner .search-box .search-location .form-control {
+            padding-left: 45px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <!-- Home Banner -->
+    <section class="section section-search hero-banner">
+        <div class="container-fluid">
+            <div class="banner-wrapper">
+                <div class="banner-header text-center">
+                    <h1>Book Appointments with Top Doctors</h1>
+                    <p>Get instant access to trusted doctors in your area for quality healthcare.</p>
+                </div>
+
+                <!-- Search -->
+                <div class="search-box">
+                    <form action="{% url 'doctors:list' %}" method="get">
+                        <div class="form-group search-location">
+                            <input type="text" name="location" class="form-control" placeholder="Enter City or Division">
+                            <span class="form-text">Find doctors in your area</span>
+                        </div>
+                        <div class="form-group search-info">
+                            <input type="text" name="q" class="form-control" placeholder="Search by Doctor Name, Specialization, or Symptoms">
+                            <span class="form-text">e.g. Cardiologist, Heart Problems, Dr. Adebayo</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search"></i> <span>Search</span></button>
+                    </form>
+                </div>
+                <!-- /Search -->
+
+            </div>
+        </div>
+    </section>
+    <!-- /Home Banner -->
+
+    <!-- Clinic and Specialities -->
+    <section class="section section-specialities">
+        <div class="container-fluid">
+            <div class="section-header text-center">
+                <h2>Medical Specialities</h2>
+                <p class="sub-title">Find specialized doctors across major medical fields to address your specific health needs</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-9">
+                    <div class="owl-carousel specialities-slider">
+                        <div class="speciality-item">
+                            <div class="speciality-img">
+                                <img src="{% static 'assets/img/specialities/specialities-01.png' %}" class="img-fluid" alt="Speciality">
+                            </div>
+                            <p>Cardiology</p>
+                        </div>
+                        <div class="speciality-item">
+                            <div class="speciality-img">
+                                <img src="{% static 'assets/img/specialities/specialities-02.png' %}" class="img-fluid" alt="Speciality">
+                            </div>
+                            <p>Dermatology</p>
+                        </div>
+                        <div class="speciality-item">
+                            <div class="speciality-img">
+                                <img src="{% static 'assets/img/specialities/specialities-03.png' %}" class="img-fluid" alt="Speciality">
+                            </div>
+                            <p>Neurology</p>
+                        </div>
+                        <div class="speciality-item">
+                            <div class="speciality-img">
+                                <img src="{% static 'assets/img/specialities/specialities-04.png' %}" class="img-fluid" alt="Speciality">
+                            </div>
+                            <p>Pediatrics</p>
+                        </div>
+                        <div class="speciality-item">
+                            <div class="speciality-img">
+                                <img src="{% static 'assets/img/specialities/specialities-05.png' %}" class="img-fluid" alt="Speciality">
+                            </div>
+                            <p>Orthopedics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Clinic and Specialities -->
+
+    <!-- Popular Section -->
+    <section class="section section-doctors">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-header">
+                        <h2>Popular Doctors</h2>
+                        <p class="sub-title">Meet our experienced healthcare professionals</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for doctor in doctors|slice:":6" %}
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="profile-widget">
+                            <div class="doc-img">
+                                <a href="{% url 'doctors:doctor-profile' doctor.username %}">
+                                    {% if doctor.profile.avatar and doctor.profile.avatar.name != 'defaults/user.png' and 'profiles/' in doctor.profile.avatar.name %}
+                                        <img src="/media/{{ doctor.profile.avatar.name }}"
+                                             class="img-fluid"
+                                             alt="{{ doctor.get_full_name }}">
+                                    {% elif doctor.profile.gender == "female" %}
+                                        <img src="{% static 'assets/img/dr_ifeoma_adeyemi.jpg' %}"
+                                             class="img-fluid"
+                                             alt="Doctor portrait">
+                                    {% else %}
+                                        <img src="{% static 'assets/img/dr_ibrahim_obi.jpg' %}"
+                                             class="img-fluid"
+                                             alt="Doctor portrait">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="pro-content">
+                                <h3 class="title">
+                                    <a href="{% url 'doctors:doctor-profile' doctor.username %}">Dr. {{ doctor.get_full_name }}</a>
+                                </h3>
+                                <p class="speciality">{{ doctor.profile.specialization|default:"General Practitioner" }}</p>
+                                {% if doctor.profile.city %}
+                                    <ul class="available-info">
+                                        <li>
+                                            <i class="fas fa-map-marker-alt"></i> {{ doctor.profile.city }}{% if doctor.profile.state %}, {{ doctor.profile.state }}{% endif %}
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                                <div class="row row-sm">
+                                    <div class="col-6">
+                                        <a href="{% url 'doctors:doctor-profile' doctor.username %}" class="btn view-btn">View Profile</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{% url 'bookings:doctor-booking-view' doctor.username %}" class="btn book-btn">Book Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p class="text-center">No doctors available at the moment.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- /Popular Section -->
+
+{% endblock %}

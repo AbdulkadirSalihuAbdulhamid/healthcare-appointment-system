@@ -1,0 +1,32 @@
+# Virtual environment
+venv/
+.env
+.env.*
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite database
+*.sqlite3
+db.sqlite3
+db.backup.sqlite3
+
+# OS junk files
+.DS_Store
+
+# Static build
+staticfiles/
+media/
+
+# Node modules
+node_modules/
+
+# CKEditor uploads
+uploads/
+
+# Local editor
+.idea/
+.vscode/
