@@ -1,0 +1,37 @@
+% Compile with: xelatex main.tex (run twice for TOC/references)
+% Or use latexmk: latexmk -xelatex main.tex
+
+\documentclass[12pt,a4paper]{report}
+
+\input{settings}
+
+\usepackage[style=numeric,sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+\begin{document}
+
+\input{frontmatter}
+
+\input{chapters/ch01-intro}
+\input{chapters/ch02-literature}
+\input{chapters/ch03-specification}
+\input{chapters/ch04-design}
+\input{chapters/ch05-implementation}
+\input{chapters/ch06-testing}
+\input{chapters/ch07-conclusion}
+
+\chapter*{References}
+\addcontentsline{toc}{chapter}{References}
+\printbibliography[heading=none]
+
+\appendix
+\chapter{User Manual}
+Production URL: \url{https://healthcare-appointment-system-9a2r.onrender.com}. Demo accounts: \texttt{patient1}, \texttt{doctor1}, \texttt{admin} with password \texttt{aaa} (academic use only).
+
+\chapter{Source Code Structure}
+Project root: \texttt{secure-cloud-based-healthcare-appointment-system/} with Django apps \texttt{accounts}, \texttt{core}, \texttt{doctors}, \texttt{patients}, \texttt{bookings}.
+
+\chapter{Screenshots and Figures}
+Insert all UI screenshots here if not placed in Chapter~4 and~5. Use continuous figure numbering across the thesis.
+
+\end{document}

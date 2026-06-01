@@ -1,0 +1,127 @@
+\chapter{Specification and Solution Approach}
+
+\section{Specification}
+\label{sec:specification}
+
+The requirements for \textbf{DocBook} were derived from studying how outpatient clinics operate in practice. A patient contacts the clinic; staff check the doctor's diary (paper or spreadsheet), reserve a slot, and later mark the visit as completed or missed. When several people work without one shared system, the same slot can be promised twice, data can be entered incorrectly, and there is no clear record of who changed an appointment.
+
+Translating this process into software requires \textbf{data validation} (correct dates, required fields, consistent status values), \textbf{concurrency} (only one patient may book a given doctor at a given date and time), and \textbf{accountability} (status changes are tied to the logged-in role). DocBook must also support patients, doctors, and administrators through \textbf{role-based access control} and basic security (hashed passwords, CSRF protection, HTTPS in production). The subsections below list functional and non-functional requirements, stakeholder needs, the manual workflow, use cases, and risks---against which Chapters 4--6 were developed.
+
+\subsection{Functional requirements}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Functional requirements}
+  \begin{tabular}{@{}cl@{}}
+    \toprule
+    ID & Requirement \\
+    \midrule
+    FR-1 & Public pages (home, terms, privacy) and doctor listing with search \\
+    FR-2 & Patients register, log in, book, view and cancel bookings, add reviews \\
+    FR-3 & Doctors set schedules, accept or reject appointments, manage patients, prescriptions \\
+    FR-4 & Administrators access dashboard with user, appointment, speciality, and reports \\
+    FR-5 & Prevent double booking of the same doctor at the same date and time \\
+    FR-6 & Appointment status: pending, confirmed, completed, cancelled, no\_show \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Non-functional requirements}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Non-functional requirements}
+  \begin{tabular}{@{}cl@{}}
+    \toprule
+    ID & Requirement \\
+    \midrule
+    NFR-1 & Passwords stored using one-way hash (PBKDF2-SHA256) \\
+    NFR-2 & Forms protected against CSRF \\
+    NFR-3 & Production enforces HTTPS, secure cookies, and HSTS \\
+    NFR-4 & Application runs on Python 3.12 and Django 5.0.6 \\
+    NFR-5 & Configuration secrets loaded from environment variables \\
+    NFR-6 & Static assets served efficiently in production (WhiteNoise) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Stakeholder analysis}
+
+\begin{itemize}
+  \item \textbf{Patients} need simplicity, clear availability, and trust in data handling.
+  \item \textbf{Doctors} need accurate schedules and quick status updates on appointments.
+  \item \textbf{Administrators} need overview statistics and control over specialities and content.
+  \item \textbf{Developers / maintainers} need modular Django apps and documented deployment steps.
+\end{itemize}
+
+\subsection{Analysis of the current situation (manual process)}
+
+Before automation, a typical small clinic workflow can be described in five steps: (1) the patient calls or visits reception; (2) staff look up the doctor's paper diary; (3) a slot is verbally agreed; (4) the name is written in the diary; (5) on the day of visit the doctor marks attendance informally. This process has weaknesses. Paper diaries are not searchable by specialisation across many doctors. Changes require physical access to the book. There is no automatic reminder. Reporting on monthly appointments or revenue requires manual counting.
+
+DocBook digitises steps 1--5. Search replaces browsing paper lists. The database replaces the diary. Status fields replace marginal notes. Reports query the database directly. The analysis shows that the highest value is not fancy graphics but \textbf{correct data model, access control, and reliable hosting}.
+
+\subsection{Use cases}
+
+\subsubsection{Patient books an appointment}
+
+\textbf{Actor:} registered patient. \textbf{Precondition:} doctor has published schedule slots. \textbf{Main flow:} patient logs in, searches for doctor, opens profile, selects date and time, submits booking, receives confirmation with pending status. \textbf{Alternative flow:} slot already taken---system shows error and offers another slot. \textbf{Postcondition:} booking record exists with status pending.
+
+\subsubsection{Doctor confirms appointment}
+
+\textbf{Actor:} registered doctor. \textbf{Precondition:} pending booking exists for that doctor. \textbf{Main flow:} doctor opens appointment list, selects booking, chooses confirm action. \textbf{Postcondition:} status becomes confirmed; patient sees updated state on dashboard.
+
+\subsubsection{Administrator generates report}
+
+\textbf{Actor:} superuser administrator. \textbf{Precondition:} historical bookings exist. \textbf{Main flow:} admin logs in, navigates to appointment report, filters by period, reads aggregated counts. \textbf{Postcondition:} no data change; information supports management decisions.
+
+\subsection{Risk analysis}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Risk analysis and mitigations}
+  \begin{tabular}{@{}p{4.5cm}cl@{}}
+    \toprule
+    Risk & Impact & Mitigation in DocBook \\
+    \midrule
+    Unauthorised access to medical data & High & RBAC, login required, HTTPS \\
+    Password leakage & High & Hashing, no plain-text storage \\
+    Double booking & Medium & DB uniqueness constraint \\
+    CSRF on forms & Medium & Django CSRF middleware \\
+    Downtime on free cloud tier & Low & Acceptable for thesis demo; paid tier for production \\
+    Weak demo passwords & Medium & Documented warning; change in real deployment \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Solution Approach}
+
+Given the requirements in Section~\ref{sec:specification}, the chosen solution is a \textbf{Django monolith}: one Python application that handles authentication, business logic, HTML pages, and database access. This approach was preferred over a separate single-page frontend because it reduces deployment complexity, keeps session-based login straightforward, and matches the skills emphasised in the computer science engineering programme. The user interface uses \textbf{server-rendered templates} (Bootstrap, jQuery, HTMX where partial updates help), with \textbf{Django REST Framework} for selected API endpoints such as profile updates.
+
+For development, the project runs locally with \textbf{SQLite}; for the thesis demonstration it is deployed on \textbf{Render.com} with \textbf{PostgreSQL}, \textbf{Gunicorn}, and \textbf{WhiteNoise} for static files. Production settings enforce HTTPS, secure cookies, and secrets from environment variables. The following subsections describe the backend, frontend, and tools---in the same order used in comparable diploma theses.
+
+\subsection{Backend}
+
+The backend uses Python 3.12 and Django 5.0.6 with applications \texttt{accounts}, \texttt{doctors}, \texttt{patients}, \texttt{bookings}, and \texttt{core}. Authentication is session-based. The ORM maps to SQLite locally and PostgreSQL in production. Gunicorn serves WSGI requests; WhiteNoise serves static files.
+
+\subsection{Frontend}
+
+The frontend uses server-rendered Django templates with Bootstrap for layout, jQuery for interactions, HTMX for partial updates, and Chart.js on the admin dashboard. Django REST Framework supports profile API endpoints. This avoids a separate SPA build while remaining responsive enough for the thesis demonstration.
+
+\subsection{Tools and Development Environment}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Development tools}
+  \begin{tabular}{@{}ll@{}}
+    \toprule
+    Tool & Purpose \\
+    \midrule
+    Python 3.12.8 & Runtime \\
+    Django 5.0.6 & Web framework \\
+    Git / GitHub & Version control \\
+    Render.com & Cloud hosting \\
+    PostgreSQL & Production database \\
+    Chrome & Testing and screenshots \\
+    \bottomrule
+  \end{tabular}
+\end{table}

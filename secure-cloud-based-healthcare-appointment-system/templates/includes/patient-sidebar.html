@@ -4,6 +4,34 @@
 
 {% load static %}
 
+{% block css %}
+<style>
+    .avatar-initials {
+        align-items: center;
+        background: #09dca4;
+        color: #fff;
+        display: inline-flex;
+        font-size: 13px;
+        font-weight: 700;
+        height: 40px;
+        justify-content: center;
+        width: 40px;
+    }
+    .profile-avatar-img {
+        height: 40px;
+        object-fit: cover;
+        width: 40px;
+    }
+    .booking-doc-img .avatar-initials,
+    .booking-doc-img .profile-avatar-img {
+        height: 80px;
+        width: 80px;
+        font-size: 22px;
+    }
+</style>
+{% block patient_extra_css %}{% endblock %}
+{% endblock %}
+
 {% block content %}
 
     <!-- Breadcrumb -->
@@ -35,7 +63,7 @@
                         <div class="widget-profile pro-widget-content">
                             <div class="profile-info-widget">
                                 <a href="#" class="booking-doc-img">
-                                    <img src="{{ user.profile.image }}" alt="User Image">
+                                    {% include 'includes/profile_avatar.html' with profile=user.profile user_obj=user %}
                                 </a>
                                 <div class="profile-det-info">
                                     <h3>{{ user.get_full_name }}</h3>

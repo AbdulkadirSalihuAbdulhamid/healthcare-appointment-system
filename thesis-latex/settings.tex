@@ -1,0 +1,45 @@
+% University of Pécs FTIK — diploma thesis layout
+\usepackage[a4paper, top=4cm, bottom=2.5cm, right=2.5cm, left=3.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\usepackage{ragged2e}
+\justifying
+
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]{\sffamily\bfseries\fontsize{14}{16}\selectfont}{\chaptertitlename\ \thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{1.5em}
+\titleformat{\section}{\sffamily\bfseries\fontsize{12}{14}\selectfont}{\thesection}{1em}{}
+\titleformat{\subsection}{\sffamily\bfseries\fontsize{12}{14}\selectfont}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{1em}{1em}
+\titlespacing*{\subsection}{0pt}{1em}{1em}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[C]{\small\textit{Secure Cloud-Based Healthcare Appointment Management System (DocBook)}}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\newcommand{\thesistitle}{Secure Cloud-Based Healthcare Appointment Management System (DocBook)}
+\newcommand{\thesisauthor}{Abdulkadir Salihu Abdulhamid}
+\newcommand{\thesissupervisor}{[SUPERVISOR\_NAME]}
+\newcommand{\thesisnumber}{[THESIS\_NUMBER]}
+\newcommand{\thesisyear}{2026}

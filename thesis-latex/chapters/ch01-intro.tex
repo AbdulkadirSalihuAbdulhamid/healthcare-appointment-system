@@ -1,0 +1,24 @@
+\chapter{Introduction}
+
+Healthcare organisations depend on reliable scheduling so that patients receive care on time and clinical staff can plan their work efficiently. In many clinics and hospitals, appointments are still arranged by telephone, paper registers, or informal messaging. These methods are slow, error-prone, and difficult to audit. When several receptionists maintain separate notebooks, double booking and lost records become frequent. Patients who cannot reach the clinic by phone may delay treatment. Doctors lack a single view of the day's consultations. Administrators cannot easily measure utilisation or revenue. A dedicated web application that runs in the cloud can centralise appointment data, enforce security rules, and give each stakeholder---patient, doctor, and administrator---a clear interface for their tasks.
+
+The global shift toward digital health accelerated after widespread adoption of internet services and mobile devices. The World Health Organization promotes digital health as a means to strengthen health systems and improve outcomes~\cite{who2024}. For computer science engineering, an appointment system is an appropriate diploma topic because it combines databases, human--computer interaction, security engineering, and distributed deployment in one coherent product.
+
+The aim of this diploma work is to design, implement, test, and deploy \textbf{DocBook}, a secure cloud-based healthcare appointment management system. The name \textbf{DocBook} reflects the purpose: a digital record of doctor appointments and related administrative data. The personal motivation for this topic came from observing how outpatient clinics struggle with manual scheduling during peak hours. I wanted to build a system that could be demonstrated to examiners both locally and through a stable HTTPS URL.
+
+\section{Objectives}
+
+The approved diploma tasks define the following primary objectives:
+
+\begin{enumerate}
+  \item Analyse the requirements of a secure, web-based healthcare appointment system for patients, doctors, and administrators.
+  \item Design and implement a role-based application that supports appointment scheduling, tracking, and management.
+  \item Implement secure authentication with encrypted password storage and access control for each user role.
+  \item Deploy the system to a cloud platform with HTTPS protection and document the architecture, tests, and results.
+\end{enumerate}
+
+\textbf{Scope included:} user registration and login, doctor search, slot-based booking, dashboards, prescriptions with rich text, admin CRUD for specialities, appointment and revenue reports, automated demo data for evaluation.
+
+\textbf{Scope excluded:} payment gateways, insurance billing, video telemedicine, native mobile applications, and integration with national electronic health record systems.
+
+The core problem is to provide a single web platform where patients can discover doctors and book appointments; doctors can publish schedules and manage visits; administrators can monitor the institution. The system must prevent users from accessing functions outside their role. Login credentials must never be stored in plain text. In production, all communication must use HTTPS.

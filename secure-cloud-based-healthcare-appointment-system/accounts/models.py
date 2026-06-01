@@ -134,8 +134,15 @@ class Profile(models.Model):
 
     @property
     def image(self):
-        return (
-            self.avatar.url
-            if self.avatar.storage.exists(self.avatar.name)
-            else "{}defaults/user.png".format(settings.MEDIA_URL)
-        )
+        """URL for templates; falls back to static placeholder when media is missing."""
+        from django.templatetags.static import static
+
+        name = (self.avatar.name or "").strip()
+        if name and name != "defaults/user.png" and name.startswith("profiles/"):
+            try:
+                if self.avatar.storage.exists(name):
+                    return self.avatar.url
+            except Exception:
+                pass
+            return f"{settings.MEDIA_URL}{name}"
+        return static("assets/img/default-avatar.svg")

@@ -1,0 +1,67 @@
+\chapter{Implementation}
+
+\section{Django Stack Development}
+
+\subsection{Backend Setup}
+
+Development used Windows 11, Python 3.12, virtual environment, and Git. Local setup:
+
+\begin{verbatim}
+python -m venv venv
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py loaddata fixtures/initial_data.json
+python create_admin.py
+python manage.py runserver
+\end{verbatim}
+
+\subsection{Frontend Setup}
+
+Templates live under \texttt{templates/}; static assets under \texttt{static/}. \texttt{collectstatic} prepares files for production; WhiteNoise serves them on Render.
+
+\section{Configuration Setup}
+
+\subsection{Middleware}
+
+Order: SecurityMiddleware, WhiteNoise, Session, Common, CSRF, Authentication, Messages, XFrameOptions.
+
+\subsection{Routes}
+
+URL configuration in \texttt{docbook/urls.py} includes apps for accounts, patients, doctors, bookings, core, and admin views.
+
+\subsection{Database Models}
+
+Key models: \texttt{User}, \texttt{Profile}, \texttt{Booking}, \texttt{Prescription}, \texttt{Review}, day schedule models, and \texttt{TimeRange}.
+
+\section{Authentication and Authorization}
+
+Login uses Django \texttt{authenticate()} and session cookies. Passwords are hashed with PBKDF2-SHA256. RBAC mixins guard class-based views; decorators guard selected function views.
+
+\section{Appointment Booking Workflow}
+
+\subsection{Schedule and Slot Generation}
+Doctors configure weekly availability; the UI derives bookable slots from time ranges minus existing bookings.
+
+\subsection{Booking Creation and Status Management}
+Patients create bookings with status \texttt{pending}; doctors confirm, complete, cancel, or mark \texttt{no\_show}.
+
+\subsection{Prescription and Review Processing}
+Doctors add prescriptions via CKEditor; patients submit reviews after completed visits.
+
+\section{Administrative Dashboard and Reports}
+
+Custom admin at \texttt{/admin/} provides statistics, user lists, speciality CRUD, and appointment/revenue reports. Django admin remains at \texttt{/super-admin/}.
+
+\section{Cloud Deployment on Render}
+
+Build command: \texttt{bash build.sh}. Start command: \texttt{gunicorn docbook.wsgi:application --bind 0.0.0.0:\$PORT}. Environment variables: \texttt{SECRET\_KEY}, \texttt{DEBUG=False}, \texttt{ALLOWED\_HOSTS}, \texttt{DATABASE\_URL}, \texttt{CSRF\_TRUSTED\_ORIGINS}.
+
+Live URL: \url{https://healthcare-appointment-system-9a2r.onrender.com}
+
+\section{Security and HTTPS Configuration}
+
+When \texttt{DEBUG=False}, settings enable SSL redirect, secure cookies, HSTS, and trusted CSRF origins.
+
+\section{User Interface Implementation}
+
+The public home page supports doctor search; role dashboards show appointments and actions appropriate to each user type.
