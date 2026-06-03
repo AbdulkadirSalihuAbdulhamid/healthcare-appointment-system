@@ -68,7 +68,8 @@ python manage.py migrate
 # Load initial data (optional)
 python generate_fixtures.py
 python manage.py loaddata fixtures/initial_data.json
-python copy_doctor_images.py  # Copy doctor images to media folder
+python scripts/generate_doctor_avatars.py  # Bundled doctor1.jpg … doctor15.jpg (Render-safe)
+python seed_doctor_schedules.py  # Time slots for all doctors
 
 # Create superuser
 python manage.py createsuperuser

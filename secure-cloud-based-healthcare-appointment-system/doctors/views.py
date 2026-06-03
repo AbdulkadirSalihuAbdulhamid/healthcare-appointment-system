@@ -7,7 +7,6 @@ from django.http import (
     HttpRequest,
     HttpResponse,
     Http404,
-    HttpResponsePermanentRedirect,
 )
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -22,8 +21,8 @@ from django.views.generic import (
 from django.views.generic.base import TemplateView
 from rest_framework.generics import UpdateAPIView
 from rest_framework.response import Response
-from django.db.models import Q
-from django.db.models import Count
+from django.db.models import Q, Avg, Count, FloatField
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -100,9 +99,17 @@ class DoctorDashboardView(DoctorRequiredMixin, TemplateView):
 
 
 def convert_to_24_hour_format(time_str):
+    if not time_str or not str(time_str).strip():
+        raise ValueError("Empty time")
+    time_str = str(time_str).strip().upper()
     if time_str == "00:00 AM":
         time_str = "12:00 AM"
-    return datetime.strptime(time_str, "%I:%M %p").time()
+    for fmt in ("%I:%M %p", "%I:%M%p", "%H:%M"):
+        try:
+            return datetime.strptime(time_str, fmt).time()
+        except ValueError:
+            continue
+    raise ValueError(f"Invalid time format: {time_str}")
 
 
 @login_required
@@ -110,28 +117,51 @@ def convert_to_24_hour_format(time_str):
 def schedule_timings(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         data = request.POST
-        for i in range(7):
-            if data.get(f"day_{i}", None):
-                start_times = data.getlist(f"start_time_{i}", default=[])
-                end_times = data.getlist(f"end_time_{i}", default=[])
-                for index in range(len(start_times)):
-                    start = convert_to_24_hour_format(start_times[index])
-                    end = convert_to_24_hour_format(end_times[index])
-                    time_range, time_created = TimeRange.objects.get_or_create(
-                        start=start, end=end
-                    )
-                    day, created = days[i].objects.get_or_create(
-                        user=request.user
-                    )
-                    ranges = day.time_range
-                    if time_range.id not in list(
-                        ranges.values_list("id", flat=True)
-                    ):
-                        day.time_range.add(time_range)
+        errors = []
+        saved_days = 0
 
-        return HttpResponsePermanentRedirect(
-            reverse_lazy("doctors:schedule-timings")
-        )
+        for i in range(7):
+            day_obj, _ = days[i].objects.get_or_create(user=request.user)
+            day_obj.time_range.clear()
+
+            if not data.get(f"day_{i}"):
+                continue
+
+            start_times = data.getlist(f"start_time_{i}")
+            end_times = data.getlist(f"end_time_{i}")
+            for index in range(len(start_times)):
+                start_raw = (start_times[index] or "").strip()
+                end_raw = (end_times[index] or "").strip()
+                if not start_raw or not end_raw:
+                    continue
+                try:
+                    start = convert_to_24_hour_format(start_raw)
+                    end = convert_to_24_hour_format(end_raw)
+                except ValueError:
+                    errors.append(
+                        f"Invalid time on {days[i].__name__}: {start_raw} – {end_raw}"
+                    )
+                    continue
+                if start >= end:
+                    errors.append(
+                        f"End time must be after start on {days[i].__name__}"
+                    )
+                    continue
+                time_range, _ = TimeRange.objects.get_or_create(
+                    start=start, end=end, defaults={"slots_per_hour": 2}
+                )
+                day_obj.time_range.add(time_range)
+            saved_days += 1
+
+        if errors:
+            for msg in errors[:5]:
+                messages.error(request, msg)
+        else:
+            messages.success(
+                request,
+                f"Schedule updated for {saved_days} day(s).",
+            )
+        return redirect("doctors:schedule-timings")
 
     return render(request, "doctors/schedule-timings.html")
 
@@ -433,7 +463,13 @@ class DoctorsListView(ListView):
                     "-profile__price_per_consultation"
                 )
             elif sort_by == "rating":
-                queryset = queryset.order_by("-rating")
+                queryset = queryset.annotate(
+                    avg_rating=Coalesce(
+                        Avg("reviews_received__rating"),
+                        0.0,
+                        output_field=FloatField(),
+                    )
+                ).order_by("-avg_rating")
             elif sort_by == "experience":
                 queryset = queryset.order_by("-profile__experience")
         else:

@@ -132,9 +132,24 @@ class Profile(models.Model):
     def __str__(self):
         return "Profile of {}".format(self.user.username)
 
+    def _static_avatar_relative_path(self):
+        """Bundled doctor photo in static/ (works on Render without media upload)."""
+        from django.contrib.staticfiles import finders
+
+        if self.user.role != User.RoleChoices.DOCTOR:
+            return None
+        username = self.user.username
+        for ext in ("jpg", "jpeg", "png", "webp"):
+            rel = f"assets/img/doctors/{username}.{ext}"
+            if finders.find(rel):
+                return rel
+        return None
+
     @property
     def has_stored_avatar(self):
-        """True only when the avatar file exists on disk (e.g. local media upload)."""
+        """True when a real photo is available (uploaded media or bundled static file)."""
+        if self._static_avatar_relative_path():
+            return True
         name = (self.avatar.name or "").strip()
         if not name or name == "defaults/user.png":
             return False
@@ -145,9 +160,12 @@ class Profile(models.Model):
 
     @property
     def image(self):
-        """URL for templates; uses static placeholder when media file is missing (Render deploy)."""
+        """URL for templates; static doctor photo, then media, then default SVG."""
         from django.templatetags.static import static
 
+        rel = self._static_avatar_relative_path()
+        if rel:
+            return static(rel)
         if self.has_stored_avatar:
             return self.avatar.url
         return static("assets/img/default-avatar.svg")
