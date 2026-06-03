@@ -35,19 +35,7 @@
                         <div class="doc-info-left">
                             <div class="doctor-img">
                                 <a href="{% url 'doctors:doctor-profile' doctor.username %}">
-                                    {% if doctor.profile.avatar and doctor.profile.avatar.name != 'defaults/user.png' and 'profiles/' in doctor.profile.avatar.name %}
-                                        <img src="/media/{{ doctor.profile.avatar.name }}"
-                                             class="img-fluid doctor-photo"
-                                             alt="{{ doctor.get_full_name }}">
-                                    {% elif doctor.profile.gender == "female" %}
-                                        <img src="{% static 'assets/img/dr_ifeoma_adeyemi.jpg' %}"
-                                             class="img-fluid doctor-photo"
-                                             alt="Doctor portrait">
-                                    {% else %}
-                                        <img src="{% static 'assets/img/dr_ibrahim_obi.jpg' %}"
-                                             class="img-fluid doctor-photo"
-                                             alt="Doctor portrait">
-                                    {% endif %}
+                                    {% include 'includes/doctor_portrait.html' with profile=doctor.profile user_obj=doctor extra_class='doctor-photo' %}
                                 </a>
                             </div>
                             <div class="doc-info-cont">

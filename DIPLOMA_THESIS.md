@@ -632,9 +632,19 @@ When `DEBUG=False`, Django redirects HTTP to HTTPS via `SECURE_SSL_REDIRECT`. HS
 
 ## 4.4. Use Case Diagrams
 
-*(Insert Figure: use case diagram with actors Patient, Doctor, Administrator and use cases Book Appointment, Confirm Appointment, Manage Schedule, View Reports. Draw in Word, Visio, or draw.io.)*
+Figure 4a presents the use case diagram for DocBook. Three actors interact with the system: **Patient**, **Doctor**, and **Administrator**. Each actor is linked to the use cases they may perform.
 
-The textual use cases in Section 3.1.5 map to this diagram: patient books; doctor confirms; administrator views reports.
+**Patient** connects to: Search Doctors, Book Appointment, Cancel Appointment, and View Medical Profile.
+
+**Doctor** connects to: Manage Schedule / Time Slots, View Assigned Patient Bookings, and Issue Prescription.
+
+**Administrator** connects to: Audit System Logs, Manage Core Specialties, and View Analytical Reports.
+
+*(Image file: `docbook_use_case.png` — regenerate with `generate_use_case.ps1`.)*
+
+**Figure 4a** — Use case diagram (Patient, Doctor, Administrator)
+
+The textual use cases in Section 3.1.5 map to this diagram. Additional flows such as doctor confirmation of appointments are sub-steps of View Assigned Patient Bookings and Book Appointment.
 
 ## 4.5. Wireframes and Interface Screens
 

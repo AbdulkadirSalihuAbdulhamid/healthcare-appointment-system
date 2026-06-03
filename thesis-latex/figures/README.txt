@@ -3,6 +3,10 @@ Thesis figure assets for LaTeX / Word.
 UCD diagram (Chapter 2):
   ucd-principles.png  OR  ucd-principles.pdf
 
+Use case diagram (Chapter 4.4):
+  docbook_use_case.png
+  Regenerate: generate_use_case.ps1
+
 Cloud architecture (Chapter 4, Figure 1):
   docbook_architecture.png
   Source: ../secure-cloud-based-healthcare-appointment-system/docbook_architecture.dot

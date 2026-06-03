@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <div class="booking-doc-info">
                                 <a href="{% url 'doctors:doctor-profile' doctor.username %}" class="booking-doc-img">
-                                    <img src="{{ doctor.profile.image }}" alt="{{ doctor.get_full_name }}">
+                                    {% include 'includes/doctor_portrait.html' with profile=doctor.profile user_obj=doctor %}
                                 </a>
                                 <div class="booking-info">
                                     <h4><a href="{% url 'doctors:doctor-profile' doctor.username %}">Dr. {{ doctor.get_full_name }}</a></h4>

@@ -86,16 +86,25 @@ class LoginView(FormView):
         return super().dispatch(self.request, *args, **kwargs)
 
     def get_success_url(self):
-        if "next" in self.request.GET and self.request.GET["next"] != "":
-            return self.request.GET["next"]
-        else:
-            return self.success_url
+        next_url = self.request.GET.get("next") or self.request.POST.get("next")
+        if next_url:
+            return next_url
+        user = getattr(self, "_login_user", None)
+        if user and user.is_superuser:
+            return reverse_lazy("admin-dashboard")
+        if user and user.role == "doctor":
+            return reverse_lazy("doctors:dashboard")
+        if user and user.role == "patient":
+            return reverse_lazy("patients:dashboard")
+        return self.success_url
 
     def get_form_class(self):
         return self.form_class
 
     def form_valid(self, form):
-        auth.login(self.request, form.get_user())
+        user = form.get_user()
+        self._login_user = user
+        auth.login(self.request, user)
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):

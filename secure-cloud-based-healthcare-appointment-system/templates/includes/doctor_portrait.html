@@ -1,0 +1,15 @@
+{% load static %}
+{# Large doctor photo: media if present, else initials (works on Render without /media/ files) #}
+{% with person=user_obj|default:profile.user %}
+<div class="doctor-portrait-frame">
+    {% if profile.avatar and profile.avatar.name != 'defaults/user.png' and 'profiles/' in profile.avatar.name %}
+        <img class="img-fluid doctor-portrait-img{% if extra_class %} {{ extra_class }}{% endif %}"
+             src="/media/{{ profile.avatar.name }}"
+             alt=""
+             onerror="this.classList.add('d-none');this.nextElementSibling.classList.remove('d-none');">
+    {% endif %}
+    <div class="doctor-portrait-initials{% if profile.avatar and profile.avatar.name != 'defaults/user.png' and 'profiles/' in profile.avatar.name %} d-none{% endif %}">
+        <span>{{ person.first_name|first|upper }}{{ person.last_name|first|upper }}</span>
+    </div>
+</div>
+{% endwith %}

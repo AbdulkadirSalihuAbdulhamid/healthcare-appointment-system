@@ -1,0 +1,115 @@
+digraph docbook_use_case {
+    graph [
+        rankdir=LR,
+        bgcolor=white,
+        fontname="Arial",
+        fontsize=18,
+        labelloc=t,
+        label="DocBook — Use Case Diagram",
+        pad=0.6,
+        splines=ortho,
+        nodesep=0.45,
+        ranksep=1.2,
+        dpi=300
+    ];
+    node [
+        fontname="Arial",
+        fontsize=13
+    ];
+    edge [
+        color="#424242",
+        penwidth=1.6
+    ];
+
+    node [
+        shape=box,
+        style="rounded,filled",
+        fillcolor="#FFF9C4",
+        color="#F57F17",
+        penwidth=2,
+        width=1.8,
+        height=0.55,
+        fontname="Arial",
+        fontsize=14
+    ];
+
+    patient_actor [label="Patient"];
+    doctor_actor [label="Doctor"];
+    admin_actor [label="Administrator"];
+
+    subgraph cluster_system {
+        label="DocBook Healthcare Appointment System";
+        style="rounded,dashed";
+        color="#1565C0";
+        penwidth=2.5;
+        fontname="Arial";
+        fontsize=14;
+        margin=24;
+
+        node [
+            shape=ellipse,
+            style="filled",
+            fillcolor="#E8F5E9",
+            color="#2E7D32",
+            penwidth=1.6,
+            width=2.4,
+            height=0.75,
+            fontname="Arial",
+            fontsize=12
+        ];
+
+        subgraph cluster_patient {
+            label="Patient use cases";
+            style=rounded;
+            color="#81C784";
+            fontname="Arial";
+            fontsize=11;
+            margin=12;
+            p_uc1 [label="Search Doctors"];
+            p_uc2 [label="Book Appointment"];
+            p_uc3 [label="Cancel Appointment"];
+            p_uc4 [label="View Medical Profile"];
+        }
+
+        subgraph cluster_doctor {
+            label="Doctor use cases";
+            style=rounded;
+            color="#64B5F6";
+            fontname="Arial";
+            fontsize=11;
+            margin=12;
+            node [fillcolor="#E3F2FD", color="#1565C0"];
+            d_uc1 [label="Manage Schedule\n/ Time Slots"];
+            d_uc2 [label="View Assigned\nPatient Bookings"];
+            d_uc3 [label="Issue Prescription"];
+        }
+
+        subgraph cluster_admin {
+            label="Administrator use cases";
+            style=rounded;
+            color="#BA68C8";
+            fontname="Arial";
+            fontsize=11;
+            margin=12;
+            node [fillcolor="#F3E5F5", color="#6A1B9A"];
+            a_uc1 [label="Audit System Logs"];
+            a_uc2 [label="Manage Core\nSpecialties"];
+            a_uc3 [label="View Analytical\nReports"];
+        }
+    }
+
+    patient_actor -> p_uc1;
+    patient_actor -> p_uc2;
+    patient_actor -> p_uc3;
+    patient_actor -> p_uc4;
+
+    doctor_actor -> d_uc1;
+    doctor_actor -> d_uc2;
+    doctor_actor -> d_uc3;
+
+    admin_actor -> a_uc1;
+    admin_actor -> a_uc2;
+    admin_actor -> a_uc3;
+
+    { rank=same; patient_actor; doctor_actor; admin_actor }
+}
