@@ -15,12 +15,12 @@ if [ -n "$DATABASE_URL" ] && [[ "$DATABASE_URL" == postgres://* ]]; then
   export DATABASE_URL="${DATABASE_URL/postgres:\/\//postgresql:\/\/}"
 fi
 
-python manage.py collectstatic --noinput
 python manage.py migrate --noinput
 
 # Load demo users and sample data (safe to re-run on deploy)
-python scripts/generate_doctor_avatars.py || true
 python manage.py loaddata fixtures/initial_data.json || true
 python create_admin.py || true
 python seed_doctor_schedules.py || true
 python seed_demo_bookings.py || true
+
+python manage.py collectstatic --noinput
