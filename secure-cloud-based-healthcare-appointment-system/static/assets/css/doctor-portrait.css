@@ -18,6 +18,33 @@
     display: block;
 }
 
+.doctor-portrait-frame {
+    position: relative;
+}
+
+.doctor-portrait-img--placeholder {
+    background: #e3f2fd;
+    object-fit: contain;
+    padding: 1.5rem;
+}
+
+.doctor-portrait-initials--badge {
+    align-items: center;
+    background: #09dca4;
+    border-radius: 50%;
+    bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: #fff;
+    display: flex;
+    font-size: 1rem;
+    font-weight: 700;
+    height: 48px;
+    justify-content: center;
+    position: absolute;
+    right: 12px;
+    width: 48px;
+}
+
 .doctor-portrait-initials {
     align-items: center;
     background: linear-gradient(135deg, #09dca4 0%, #1976d2 100%);

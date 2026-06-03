@@ -113,7 +113,7 @@ class ProfileModelTests(TestCase):
 
     def test_profile_image_property(self):
         """Test profile image property"""
-        # Test default image (static placeholder when media file is absent)
+        self.assertFalse(self.profile.has_stored_avatar)
         self.assertIn("default-avatar.svg", self.profile.image)
 
         # Test custom avatar

@@ -133,16 +133,21 @@ class Profile(models.Model):
         return "Profile of {}".format(self.user.username)
 
     @property
+    def has_stored_avatar(self):
+        """True only when the avatar file exists on disk (e.g. local media upload)."""
+        name = (self.avatar.name or "").strip()
+        if not name or name == "defaults/user.png":
+            return False
+        try:
+            return self.avatar.storage.exists(name)
+        except Exception:
+            return False
+
+    @property
     def image(self):
-        """URL for templates; falls back to static placeholder when media is missing."""
+        """URL for templates; uses static placeholder when media file is missing (Render deploy)."""
         from django.templatetags.static import static
 
-        name = (self.avatar.name or "").strip()
-        if name and name != "defaults/user.png" and name.startswith("profiles/"):
-            try:
-                if self.avatar.storage.exists(name):
-                    return self.avatar.url
-            except Exception:
-                pass
-            return f"{settings.MEDIA_URL}{name}"
+        if self.has_stored_avatar:
+            return self.avatar.url
         return static("assets/img/default-avatar.svg")
