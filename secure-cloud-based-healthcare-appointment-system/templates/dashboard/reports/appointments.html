@@ -3,81 +3,70 @@
 
 {% block title %}Appointment Reports{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'dashboard/assets/css/admin-reports.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <div class="row">
-        <div class="col-sm-12">
-            <h3 class="page-title">Appointment Reports</h3>
-            <p class="text-muted">Last 30 days of appointment activity.</p>
-        </div>
-    </div>
+<div class="report-hero">
+    <h3 class="mb-1">Appointment Reports</h3>
+    <p class="mb-0">Overview of booking activity (last 12 months).</p>
 </div>
 
 <div class="row">
-    <div class="col-xl-4 col-sm-6 col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="dash-widget-header">
-                    <div class="dash-count">
-                        <h3>{{ total_appointments }}</h3>
-                        <h6>Total Appointments</h6>
-                    </div>
-                </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card report-stat-card report-stat-total">
+            <div class="card-body text-center">
+                <h3>{{ total_appointments }}</h3>
+                <h6>Total Appointments</h6>
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-sm-6 col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="dash-widget-header">
-                    <div class="dash-count">
-                        <h3>{{ completed_appointments }}</h3>
-                        <h6>Completed</h6>
-                    </div>
-                </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card report-stat-card report-stat-completed">
+            <div class="card-body text-center">
+                <h3>{{ completed_appointments }}</h3>
+                <h6>Completed</h6>
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-sm-6 col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="dash-widget-header">
-                    <div class="dash-count">
-                        <h3>{{ cancelled_appointments }}</h3>
-                        <h6>Cancelled</h6>
-                    </div>
-                </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card report-stat-card report-stat-cancelled">
+            <div class="card-body text-center">
+                <h3>{{ cancelled_appointments }}</h3>
+                <h6>Cancelled</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="card report-stat-card report-stat-pending">
+            <div class="card-body text-center">
+                <h3>{{ pending_appointments }}</h3>
+                <h6>Pending</h6>
             </div>
         </div>
     </div>
 </div>
-
-{% if total_appointments == 0 %}
-<div class="alert alert-info">
-    No appointments in the last 30 days. Log in as a patient, book appointments with a doctor,
-    or run <code>python seed_demo_bookings.py</code> to add sample data for this report.
-</div>
-{% endif %}
 
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
+        <div class="card report-chart-card">
             <div class="card-body">
                 <h4 class="card-title">Monthly Appointment Trends</h4>
-                <canvas id="appointmentTrends" height="120"></canvas>
+                <canvas id="appointmentTrends" height="140"></canvas>
             </div>
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card">
+        <div class="card report-chart-card">
             <div class="card-body">
                 <h4 class="card-title">Status Distribution</h4>
-                <canvas id="statusChart" height="120"></canvas>
+                <canvas id="statusChart" height="140"></canvas>
             </div>
         </div>
     </div>
     <div class="col-md-12">
-        <div class="card">
+        <div class="card report-chart-card report-table">
             <div class="card-body">
                 <h4 class="card-title">Doctor Performance</h4>
                 <div class="table-responsive">
@@ -115,52 +104,56 @@
 {% block scripts %}
 {{ monthly_stats|json_script:"monthly-stats-data" }}
 {{ status_stats|json_script:"status-stats-data" }}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-    const monthlyData = JSON.parse(
-        document.getElementById('monthly-stats-data')?.textContent || '[]'
-    );
-    const statusData = JSON.parse(
-        document.getElementById('status-stats-data')?.textContent || '[]'
-    );
+    const monthlyData = JSON.parse(document.getElementById('monthly-stats-data')?.textContent || '[]');
+    const statusData = JSON.parse(document.getElementById('status-stats-data')?.textContent || '[]');
 
-    if (monthlyData.length && document.getElementById('appointmentTrends')) {
+    const chartColors = ['#1565c0', '#09dca4', '#ef6c00', '#c62828', '#6a1b9a', '#00838f'];
+
+    if (document.getElementById('appointmentTrends')) {
         new Chart(document.getElementById('appointmentTrends'), {
             type: 'line',
             data: {
-                labels: monthlyData.map(d => {
+                labels: monthlyData.length ? monthlyData.map(d => {
                     const date = new Date(d.month);
-                    return date.toLocaleDateString('default', { month: 'long', year: 'numeric' });
-                }),
+                    return date.toLocaleDateString('default', { month: 'short', year: 'numeric' });
+                }) : ['No data'],
                 datasets: [{
                     label: 'Total',
-                    data: monthlyData.map(d => d.total),
-                    borderColor: '#20c0f3'
+                    data: monthlyData.length ? monthlyData.map(d => d.total) : [0],
+                    borderColor: '#1565c0',
+                    backgroundColor: 'rgba(21, 101, 192, 0.15)',
+                    fill: true,
+                    tension: 0.3
                 }, {
                     label: 'Completed',
-                    data: monthlyData.map(d => d.completed),
-                    borderColor: '#28a745'
+                    data: monthlyData.length ? monthlyData.map(d => d.completed) : [0],
+                    borderColor: '#2e7d32',
+                    tension: 0.3
                 }, {
                     label: 'Cancelled',
-                    data: monthlyData.map(d => d.cancelled),
-                    borderColor: '#dc3545'
+                    data: monthlyData.length ? monthlyData.map(d => d.cancelled) : [0],
+                    borderColor: '#c62828',
+                    tension: 0.3
                 }]
             },
             options: {
                 responsive: true,
+                plugins: { legend: { position: 'bottom' } },
                 scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
             }
         });
     }
 
-    if (statusData.length && document.getElementById('statusChart')) {
+    if (document.getElementById('statusChart')) {
         new Chart(document.getElementById('statusChart'), {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-                labels: statusData.map(d => d.status.charAt(0).toUpperCase() + d.status.slice(1)),
+                labels: statusData.length ? statusData.map(d => d.status.charAt(0).toUpperCase() + d.status.slice(1)) : ['No data'],
                 datasets: [{
-                    data: statusData.map(d => d.count),
-                    backgroundColor: ['#20c0f3', '#28a745', '#dc3545', '#ffc107']
+                    data: statusData.length ? statusData.map(d => d.count) : [1],
+                    backgroundColor: chartColors
                 }]
             },
             options: {

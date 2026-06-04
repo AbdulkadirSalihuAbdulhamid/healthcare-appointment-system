@@ -21,6 +21,7 @@ python manage.py migrate --noinput
 python manage.py loaddata fixtures/initial_data.json || true
 python create_admin.py || true
 python seed_doctor_schedules.py || true
+python seed_specialities.py || true
 python seed_demo_bookings.py || true
 
 python manage.py collectstatic --noinput

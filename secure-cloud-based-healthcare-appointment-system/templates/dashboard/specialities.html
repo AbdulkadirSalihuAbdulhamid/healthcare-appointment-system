@@ -157,9 +157,7 @@
                                         <a href="{{ speciality.get_absolute_url }}">{{ speciality.name }}</a>
                                     </h2>
                                 </td>
-                                <td>
-                                    {% comment %} {{ speciality.doctor_count }} {% endcomment %}
-                                </td>
+                                <td>{{ speciality.matched_doctors }}</td>
                                 <td>
                                     <span class="badge badge-pill {% if speciality.is_active %}bg-success-light{% else %}bg-danger-light{% endif %}">
                                         {{ speciality.is_active|yesno:"Active,Inactive" }}
@@ -201,7 +199,7 @@
 </div>
 {% endblock %}
 
-{% block extra_scripts %}
+{% block scripts %}
 <script>
 $(document).ready(function() {
     // Edit Speciality

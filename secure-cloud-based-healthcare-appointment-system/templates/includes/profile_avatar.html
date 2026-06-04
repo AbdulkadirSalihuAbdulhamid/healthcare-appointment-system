@@ -1,5 +1,5 @@
 {% load static %}
-{# Small avatar: uses profile.image (static fallback when /media/ missing on Render) #}
+{# Small avatar via profile.image #}
 {% with person=user_obj|default:profile.user %}
     <img class="avatar-img rounded-circle profile-avatar-img"
          src="{{ profile.image }}"

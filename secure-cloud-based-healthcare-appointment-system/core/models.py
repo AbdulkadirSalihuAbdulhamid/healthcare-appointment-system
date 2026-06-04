@@ -32,9 +32,11 @@ class Speciality(models.Model):
 
     @property
     def image_url(self):
+        from django.templatetags.static import static
+
         if self.image:
             return self.image.url
-        return "/static/assets/img/specialities/default.png"
+        return static("assets/img/default-avatar.svg")
 
 
 class Review(models.Model):

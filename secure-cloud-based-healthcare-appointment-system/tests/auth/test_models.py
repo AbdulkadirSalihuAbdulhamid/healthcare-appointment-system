@@ -83,7 +83,7 @@ class UserModelTests(TestCase):
     def test_rating_properties(self):
         """Test rating related properties"""
         # Test default values
-        self.assertEqual(self.user.rating, 4)  # Default value
+        self.assertEqual(self.user.rating, 0)
         self.assertEqual(self.user.average_rating, 0)  # No reviews
         self.assertEqual(self.user.rating_count, 0)  # No reviews
         

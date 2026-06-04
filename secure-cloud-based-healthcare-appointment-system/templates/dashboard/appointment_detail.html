@@ -1,0 +1,46 @@
+{% extends "dashboard/base.html" %}
+{% load money %}
+
+{% block title %}Appointment Details{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3 class="page-title">Appointment Details</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'admin-appointments' %}">Appointments</a></li>
+                <li class="breadcrumb-item active">#{{ appointment.pk }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card report-card">
+            <div class="card-body">
+                <p><strong>Doctor:</strong> Dr. {{ appointment.doctor.get_full_name }} ({{ appointment.doctor.profile.specialization }})</p>
+                <p><strong>Patient:</strong> {{ appointment.patient.get_full_name }}</p>
+                <p><strong>Date:</strong> {{ appointment.appointment_date|date:"d M Y" }} at {{ appointment.appointment_time|time:"h:i A" }}</p>
+                <p><strong>Status:</strong> <span class="badge badge-pill bg-info-light">{{ appointment.status|title }}</span></p>
+                <p><strong>Fee:</strong> {% money appointment.doctor.profile.price_per_consultation %}</p>
+                {% if appointment.notes %}
+                <p><strong>Notes:</strong> {{ appointment.notes }}</p>
+                {% endif %}
+                <a href="{% url 'admin-appointments' %}" class="btn btn-secondary mt-3">Back to list</a>
+                {% if appointment.status == 'pending' %}
+                <form method="post" action="{% url 'admin-appointment-action' appointment.pk 'confirm' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success mt-3">Accept</button>
+                </form>
+                <form method="post" action="{% url 'admin-appointment-action' appointment.pk 'cancel' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger mt-3">Cancel</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

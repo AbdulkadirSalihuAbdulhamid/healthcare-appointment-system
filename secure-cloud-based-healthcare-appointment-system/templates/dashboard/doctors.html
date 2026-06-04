@@ -59,15 +59,25 @@
                                 </td>
                                 <td>
                                     <div class="actions">
-                                        <a href="{% url 'doctors:doctor-profile' doctor.username %}" class="btn btn-sm bg-info-light">
+                                        <a href="{% url 'doctors:doctor-profile' doctor.username %}" class="btn btn-sm bg-info-light" target="_blank">
                                             <i class="fe fe-eye"></i> View
                                         </a>
-                                        <a href="#" class="btn btn-sm bg-success-light">
-                                            <i class="fe fe-check"></i> Approve
-                                        </a>
-                                        <a href="#" class="btn btn-sm bg-danger-light">
-                                            <i class="fe fe-times"></i> Block
-                                        </a>
+                                        {% if not doctor.is_active %}
+                                        <form method="post" action="{% url 'admin-doctor-action' doctor.pk 'approve' %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm bg-success-light">
+                                                <i class="fe fe-check"></i> Approve
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                        {% if doctor.is_active %}
+                                        <form method="post" action="{% url 'admin-doctor-action' doctor.pk 'block' %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm bg-danger-light" onclick="return confirm('Block this doctor?');">
+                                                <i class="fe fe-times"></i> Block
+                                            </button>
+                                        </form>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>
@@ -86,20 +96,11 @@
     </div>
 </div>
 
-{% block extra_css %}
-<style>
-    .actions .btn {
-        margin-right: 5px;
-    }
-    .actions .btn:last-child {
-        margin-right: 0;
-    }
-    .badge {
-        padding: 5px 10px;
-    }
-    .pagination {
-        justify-content: flex-end;
-    }
-</style>
 {% endblock %}
+
+{% block css %}
+<style>
+    .actions .btn, .actions form { display: inline-block; margin-right: 5px; }
+    .actions form button { border: none; }
+</style>
 {% endblock %}

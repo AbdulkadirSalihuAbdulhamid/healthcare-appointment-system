@@ -2,6 +2,8 @@ from django.views.generic import TemplateView
 from django.db.models import Count, Sum, Avg
 from accounts.decorators import AdminRequiredMixin
 from django.views.generic import ListView
+from django.views import View
+from django.shortcuts import get_object_or_404, redirect
 from datetime import date
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -10,8 +12,6 @@ from django.db.models.functions import TruncMonth, TruncDay
 from django.db.models import Count, Sum, Q
 from django.utils import timezone
 from datetime import timedelta
-from django.core.serializers.json import DjangoJSONEncoder
-import json
 from decimal import Decimal
 
 from core.models import Review, Speciality
@@ -141,7 +141,15 @@ class AdminDoctorsView(AdminRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return User.objects.filter(role="doctor")
+        doctors = User.objects.filter(role="doctor").select_related("profile")
+        for doctor in doctors:
+            doctor.earned = (
+                Booking.objects.filter(doctor=doctor, status="completed").aggregate(
+                    total=Sum("doctor__profile__price_per_consultation")
+                )["total"]
+                or 0
+            )
+        return doctors
 
 
 class AdminAppointmentsView(AdminRequiredMixin, ListView):
@@ -163,7 +171,13 @@ class AdminSpecialitiesView(AdminRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Speciality.objects.all().order_by("name")
+        specialities = list(Speciality.objects.all().order_by("name"))
+        for speciality in specialities:
+            speciality.matched_doctors = User.objects.filter(
+                role="doctor",
+                profile__specialization__iexact=speciality.name,
+            ).count()
+        return specialities
 
 
 class SpecialityCreateView(AdminRequiredMixin, CreateView):
@@ -252,9 +266,8 @@ class AppointmentReportView(AdminRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Get date range from query params or default to last 30 days
         end_date = timezone.now().date()
-        start_date = end_date - timedelta(days=30)
+        start_date = end_date - timedelta(days=365)
 
         # Get appointments data
         appointments = Booking.objects.filter(
@@ -291,8 +304,8 @@ class AppointmentReportView(AdminRequiredMixin, TemplateView):
 
         context.update(
             {
-                "monthly_stats": json.dumps(monthly_stats),
-                "status_stats": json.dumps(status_stats),
+                "monthly_stats": monthly_stats,
+                "status_stats": status_stats,
                 "doctor_stats": doctor_stats,
                 "total_appointments": appointments.count(),
                 "completed_appointments": appointments.filter(
@@ -300,6 +313,9 @@ class AppointmentReportView(AdminRequiredMixin, TemplateView):
                 ).count(),
                 "cancelled_appointments": appointments.filter(
                     status="cancelled"
+                ).count(),
+                "pending_appointments": appointments.filter(
+                    status="pending"
                 ).count(),
             }
         )
@@ -314,11 +330,12 @@ class RevenueReportView(AdminRequiredMixin, TemplateView):
 
         # Add date filtering
         end_date = timezone.now().date()
-        start_date = end_date - timedelta(days=30)
+        start_date = end_date - timedelta(days=365)
 
-        completed_bookings = Booking.objects.filter(status="completed").select_related(
-            "doctor__profile"
-        )
+        completed_bookings = Booking.objects.filter(
+            status="completed",
+            appointment_date__range=[start_date, end_date],
+        ).select_related("doctor__profile")
 
         # Monthly revenue
         monthly_revenue = list(
@@ -348,6 +365,19 @@ class RevenueReportView(AdminRequiredMixin, TemplateView):
             stat["revenue"] = float(stat["revenue"]) if stat["revenue"] else 0
 
         # Add summary statistics
+        specialization_revenue = list(
+            completed_bookings.exclude(doctor__profile__specialization__isnull=True)
+            .exclude(doctor__profile__specialization="")
+            .values("doctor__profile__specialization")
+            .annotate(
+                revenue=Sum("doctor__profile__price_per_consultation"),
+                appointments=Count("id"),
+            )
+            .order_by("-revenue")
+        )
+        for stat in specialization_revenue:
+            stat["revenue"] = float(stat["revenue"]) if stat["revenue"] else 0
+
         context.update(
             {
                 "total_appointments": completed_bookings.count(),
@@ -364,24 +394,68 @@ class RevenueReportView(AdminRequiredMixin, TemplateView):
                 .annotate(total=Sum("doctor__profile__price_per_consultation"))
                 .order_by("-total")
                 .first(),
-                "monthly_revenue_stats": json.dumps(monthly_revenue),
+                "monthly_revenue_stats": monthly_revenue,
                 "monthly_revenue": monthly_revenue,
                 "doctor_revenue": doctor_revenue,
                 "total_revenue": completed_bookings.aggregate(
                     total=Sum("doctor__profile__price_per_consultation")
                 )["total"]
                 or 0,
+                "specialization_revenue": specialization_revenue,
             }
         )
 
-        # Add revenue by specialization
-        # specialization_revenue = completed_bookings.values(
-        #     "doctor__profile__specialization__name"
-        # ).annotate(
-        #     revenue=Sum("doctor__profile__price_per_consultation"),
-        #     appointments=Count("id")
-        # ).order_by("-revenue")
-
-        context["specialization_revenue"] = 0  # specialization_revenue
-
         return context
+
+
+class AdminAppointmentDetailView(AdminRequiredMixin, TemplateView):
+    template_name = "dashboard/appointment_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["appointment"] = get_object_or_404(
+            Booking.objects.select_related(
+                "doctor", "doctor__profile", "patient", "patient__profile"
+            ),
+            pk=kwargs["pk"],
+        )
+        return context
+
+
+class AdminAppointmentActionView(AdminRequiredMixin, View):
+    def post(self, request, pk, action):
+        booking = get_object_or_404(Booking, pk=pk)
+        if action == "confirm":
+            booking.status = "confirmed"
+            messages.success(request, "Appointment accepted.")
+        elif action == "cancel":
+            booking.status = "cancelled"
+            messages.success(request, "Appointment cancelled.")
+        elif action == "complete":
+            booking.status = "completed"
+            messages.success(request, "Appointment marked as completed.")
+        else:
+            messages.error(request, "Unknown action.")
+            return redirect("admin-appointments")
+        booking.save()
+        return redirect("admin-appointments")
+
+
+class AdminDoctorActionView(AdminRequiredMixin, View):
+    def post(self, request, pk, action):
+        doctor = get_object_or_404(User, pk=pk, role=User.RoleChoices.DOCTOR)
+        if action == "approve":
+            doctor.is_active = True
+            doctor.profile.is_available = True
+            doctor.profile.save(update_fields=["is_available"])
+            doctor.save(update_fields=["is_active"])
+            messages.success(request, f"Dr. {doctor.get_full_name()} is now active.")
+        elif action == "block":
+            doctor.is_active = False
+            doctor.profile.is_available = False
+            doctor.profile.save(update_fields=["is_available"])
+            doctor.save(update_fields=["is_active"])
+            messages.success(request, f"Dr. {doctor.get_full_name()} has been blocked.")
+        else:
+            messages.error(request, "Unknown action.")
+        return redirect("admin-doctors")

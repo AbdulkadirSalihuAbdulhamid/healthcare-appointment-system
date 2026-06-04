@@ -8,6 +8,9 @@ from accounts.views.admin_views import (
     AdminPatientsView,
     AdminDoctorsView,
     AdminAppointmentsView,
+    AdminAppointmentDetailView,
+    AdminAppointmentActionView,
+    AdminDoctorActionView,
     AdminSpecialitiesView,
     SpecialityCreateView,
     SpecialityUpdateView,
@@ -54,6 +57,21 @@ urlpatterns = (
                         "appointments/",
                         AdminAppointmentsView.as_view(),
                         name="admin-appointments",
+                    ),
+                    path(
+                        "appointments/<int:pk>/",
+                        AdminAppointmentDetailView.as_view(),
+                        name="admin-appointment-detail",
+                    ),
+                    path(
+                        "appointments/<int:pk>/<str:action>/",
+                        AdminAppointmentActionView.as_view(),
+                        name="admin-appointment-action",
+                    ),
+                    path(
+                        "doctors/<int:pk>/<str:action>/",
+                        AdminDoctorActionView.as_view(),
+                        name="admin-doctor-action",
                     ),
                     path(
                         "specialities/",

@@ -61,8 +61,9 @@ class User(AbstractUser):
 
     @property
     def rating(self):
-        # Implement your rating logic here
-        return 4  # Default value
+        """Star rating for templates (0–5); uses review average when present."""
+        avg = self.average_rating
+        return int(round(avg)) if avg else 0
 
     @property
     def average_rating(self):
@@ -133,7 +134,7 @@ class Profile(models.Model):
         return "Profile of {}".format(self.user.username)
 
     def _static_avatar_relative_path(self):
-        """Bundled doctor photo in static/ (works on Render without media upload)."""
+        """Bundled doctor photo shipped under static/assets/img/doctors/."""
         from django.contrib.staticfiles import finders
 
         if self.user.role != User.RoleChoices.DOCTOR:

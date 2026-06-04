@@ -1,0 +1,69 @@
+.report-hero {
+    background: linear-gradient(135deg, #0d47a1 0%, #09dca4 100%);
+    border-radius: 12px;
+    color: #fff;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.report-stat-card {
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    overflow: hidden;
+}
+
+.report-stat-card .card-body {
+    padding: 1.25rem;
+}
+
+.report-stat-card h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.report-stat-card h6 {
+    opacity: 0.9;
+    margin: 0;
+}
+
+.report-stat-total {
+    background: linear-gradient(135deg, #1565c0, #42a5f5);
+}
+
+.report-stat-completed {
+    background: linear-gradient(135deg, #2e7d32, #66bb6a);
+}
+
+.report-stat-cancelled {
+    background: linear-gradient(135deg, #c62828, #ef5350);
+}
+
+.report-stat-pending {
+    background: linear-gradient(135deg, #ef6c00, #ffa726);
+}
+
+.report-stat-revenue {
+    background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+}
+
+.report-chart-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(13, 71, 161, 0.08);
+}
+
+.report-chart-card .card-title {
+    color: #0d47a1;
+    font-weight: 600;
+}
+
+.report-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.report-table thead {
+    background: #e3f2fd;
+}
